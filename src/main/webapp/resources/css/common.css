@@ -1,0 +1,163 @@
+/* 전체 페이지 기본 설정 */
+body {
+    background-color: #f0f8ff; /* 아주 연한 하늘색 배경 (AliceBlue) */
+    color: #343a40;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* 상단 네비게이션 바 */
+.site-header {
+    background-color: #87CEEB; /* 하늘색 배경 (SkyBlue) */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 0.8rem 0;
+}
+
+.site-header .navbar-brand {
+    font-weight: 800; /* 로고 글씨를 아주 두껍게 */
+    color: #ffffff;
+    font-size: 1.6rem;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2); /* 그림자 강화 */
+    letter-spacing: 0.5px; /* 자간 살짝 넓힘 */
+}
+
+/* 메뉴 링크 스타일 수정 */
+.site-header .nav-item {
+    margin: 0 8px;
+}
+
+.site-header .nav-link {
+    color: #ffffff;
+    font-weight: 700; /* 메뉴 글씨를 두껍게 (Bold) */
+    padding: 0.6rem 1.2rem;
+    border-radius: 2rem;
+    background-color: rgba(255, 255, 255, 0.25); /* 배경 투명도 조절 */
+    border: 2px solid rgba(255, 255, 255, 0.6); /* 테두리 두께와 투명도 조절 */
+    transition: all 0.3s ease;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1); /* 텍스트 그림자 추가로 가독성 향상 */
+}
+
+/* 마우스 호버 시 효과 */
+.site-header .nav-link:hover {
+    background-color: #ffffff;
+    color: #007bff;
+    border-color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    text-shadow: none; /* 호버 시에는 텍스트 그림자 제거 */
+}
+
+/* 활성(현재 페이지) 메뉴 스타일 */
+.site-header .nav-link.active {
+    background-color: #ffffff;
+    color: #007bff;
+    border-color: #ffffff;
+    font-weight: 800; /* 활성 메뉴는 더 두껍게 */
+}
+
+/* 페이지 제목 */
+.page-title {
+    font-weight: bold;
+    margin-bottom: 2rem;
+    color: #343a40;
+}
+
+/* 필터 폼 컨테이너 */
+.filter-form {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+}
+
+/* 폼 요소 */
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.form-control, .form-select {
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #87CEEB;
+    box-shadow: 0 0 0 0.2rem rgba(135, 206, 235, 0.25);
+}
+
+/* 기본 버튼 스타일 */
+.btn-primary {
+    background-color: #00BFFF; /* 딥 스카이 블루 */
+    border-color: #00BFFF;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.btn-primary:hover {
+    background-color: #009ACD;
+    border-color: #009ACD;
+}
+
+/* 아코디언 (성경 구절 목록) 수정 */
+.accordion-item {
+    border: none; /* 기본 테두리 제거 */
+    border-radius: 0.5rem; /* 둥근 모서리 */
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* 그림자 추가 */
+    overflow: hidden; /* 둥근 모서리 적용을 위해 */
+}
+
+.accordion-header .accordion-button {
+    font-weight: 600;
+    color: #343a40;
+    background-color: #ffffff; /* 배경을 흰색으로 변경 */
+    border-bottom: 1px solid #f0f0f0; /* 헤더와 바디 구분선 */
+}
+
+/* 아코디언이 열렸을 때 버튼 스타일 */
+.accordion-header .accordion-button:not(.collapsed) {
+    background-color: #f5fcff; /* 아주 옅은 하늘색 */
+    color: #007bff;
+    box-shadow: none;
+}
+
+/* 아코디언 버튼 포커스 효과 제거 (기본 파란색 테두리) */
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(0,0,0,.125);
+}
+
+.accordion-body {
+    padding: 1.5rem;
+    background-color: #ffffff;
+}
+
+/* 성경 구절 스타일 */
+.bible-verse {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.bible-verse:last-child {
+    border-bottom: none;
+}
+
+.bible-verse strong {
+    margin-right: 1rem;
+    color: #00BFFF; /* 강조 색상도 하늘색 계열로 변경 */
+}
+
+/* 모바일 환경 헤더 메뉴 간격 조정 (991px -> 767px) */
+@media (max-width: 767px) {
+    .site-header .navbar-collapse {
+        padding-top: 15px; /* 메뉴 상단 여백 */
+    }
+    .site-header .nav-item {
+        margin: 8px 0; /* 각 메뉴의 상하 간격 추가 */
+    }
+    .site-header .nav-link {
+        display: block; /* 링크를 블록 요소로 만들어 전체 영역 클릭 가능하게 */
+        width: 100%;
+    }
+}

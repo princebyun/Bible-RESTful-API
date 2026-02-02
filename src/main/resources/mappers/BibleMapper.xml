@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bible.bible.mapper.BibleMapper">
+
+    <select id="findByFilter" resultType="bible.bible.domain.Bible">
+        SELECT *
+        FROM BIBLE
+        <where>
+            <if test="cate != null">
+                AND cate = #{cate}
+            </if>
+            <if test="book != null">
+                AND book = #{book}
+            </if>
+            <if test="chapter != null">
+                AND chapter = #{chapter}
+            </if>
+            <if test="paragraph != null">
+                AND paragraph = #{paragraph}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND sentence LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
+        ORDER BY seq
+    </select>
+
+    <select id="findDistinctTestaments" resultType="java.lang.String">
+        SELECT testament
+        FROM BIBLE
+        GROUP BY testament, cate
+        ORDER BY cate
+    </select>
+
+    <select id="findDistinctBooks" resultType="bible.bible.domain.BookInfo">
+        SELECT book, long_label
+        FROM BIBLE
+        <where>
+            <if test="cate != null">
+                AND cate = #{cate}
+            </if>
+        </where>
+        GROUP BY book, long_label
+        ORDER BY book
+    </select>
+
+    <select id="findMaxChapterByBook" resultType="java.lang.Integer">
+        SELECT MAX(chapter)
+        FROM BIBLE
+        WHERE book = #{book}
+    </select>
+
+</mapper>

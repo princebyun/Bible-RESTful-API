@@ -1,0 +1,229 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+body {
+    background-image: url('../images/bag1.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-bar {
+    padding: 20px 40px;
+    background: transparent;
+    text-align: left;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+}
+
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.search-wrapper {
+    width: 100%;
+    max-width: 700px;
+    margin-bottom: 60px;
+}
+
+.main-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+}
+
+.search-form {
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: 20px 60px;
+    border-radius: 30px;
+    border: none;
+    font-size: 1.2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+.search-input:focus {
+    outline: none;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.4);
+}
+
+.search-icon {
+    position: absolute;
+    left: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.3rem;
+    color: #888;
+}
+
+/* --- Slider Styles --- */
+.slider-container {
+    position: relative;
+    width: 100%;
+    max-width: 1050px; /* 3 cards (320*3 + 30*2) */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-wrapper {
+    width: 100%;
+    overflow-x: hidden; /* 데스크탑/태블릿: 스크롤바 숨김 (JS로 제어) */
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px 0;
+}
+
+.card-container {
+    display: flex;
+    gap: 30px;
+    width: max-content;
+    flex-wrap: nowrap;
+    padding: 0 5px;
+}
+
+.custom-card {
+    width: 320px;
+    background-color: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.custom-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.card-image-wrapper {
+    height: 200px;
+    overflow: hidden;
+}
+
+.card-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.custom-card:hover .card-image-wrapper img {
+    transform: scale(1.08);
+}
+
+.card-content {
+    padding: 25px;
+    text-align: left;
+    flex-grow: 1;
+}
+
+.card-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.card-desc {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.5;
+}
+
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    color: #333;
+    cursor: pointer;
+    z-index: 20;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    transition: background-color 0.2s, opacity 0.3s, visibility 0.3s;
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slider-btn:hover {
+    background-color: white;
+}
+
+.slider-btn.prev { left: -25px; }
+.slider-btn.next { right: -25px; }
+
+.slider-container:hover .slider-btn {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Tablet (768px ~ 1100px) */
+@media (max-width: 1100px) and (min-width: 768px) {
+    .slider-container {
+        max-width: 690px; /* 2 cards (300*2 + 30*1) + 여유 */
+    }
+    .custom-card { width: 300px; }
+
+    /* 태블릿에서도 버튼 보이게 유지 */
+    .slider-btn { display: flex; }
+}
+
+/* Mobile ( ~ 767px) */
+@media (max-width: 767px) {
+    .main-title { font-size: 2rem; }
+    .search-wrapper { margin-bottom: 40px; }
+    .slider-container { max-width: 100%; padding: 0 20px; }
+
+    .card-wrapper {
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+    }
+    .card-wrapper::-webkit-scrollbar { display: none; }
+    .card-wrapper { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .card-container { gap: 20px; }
+    .custom-card {
+        width: 280px;
+        scroll-snap-align: start;
+    }
+    .slider-btn { display: none !important; }
+}

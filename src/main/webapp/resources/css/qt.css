@@ -1,0 +1,158 @@
+/* 전체 페이지 스크롤 방지 (내부 스크롤 사용) */
+body, html {
+    height: 100%;
+    overflow: hidden; /* 전체 스크롤바 제거 */
+}
+
+/* 전체 컨테이너 */
+.qt-page-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem 2rem; /* 상하 패딩 축소 */
+    height: calc(100% - 80px); /* 헤더 높이(약 80px)를 뺀 나머지 높이 사용 */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 캡처 영역 (row) */
+#capture-area {
+    flex-grow: 1; /* 남은 공간 모두 차지 */
+    height: 100%; /* 높이 꽉 채움 */
+    overflow: hidden; /* 내부 요소가 넘치지 않도록 */
+}
+
+/* 왼쪽: 큐티 본문 영역 */
+.qt-content-area {
+    background-color: #fff;
+    padding: 1.5rem; /* 패딩 축소 */
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    height: 100%; /* 부모 높이에 맞춤 */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* 내부 스크롤을 위해 숨김 */
+}
+
+.qt-header {
+    text-align: center;
+    margin-bottom: 1rem; /* 마진 축소 */
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.8rem;
+    flex-shrink: 0; /* 헤더 크기 고정 */
+}
+.qt-date {
+    font-size: 0.9rem; /* 폰트 축소 */
+    color: #6c757d;
+    margin-bottom: 0.2rem;
+}
+.qt-title {
+    font-size: 1.4rem; /* 폰트 축소 */
+    font-weight: bold;
+    margin: 0.3rem 0;
+    color: #343a40;
+    word-break: keep-all;
+}
+.qt-passage {
+    font-size: 0.95rem; /* 폰트 축소 */
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 0;
+}
+.qt-body {
+    flex-grow: 1; /* 남은 공간 차지 */
+    overflow-y: auto; /* 내용이 많으면 스크롤 */
+    padding-right: 0.5rem; /* 스크롤바 공간 확보 */
+}
+/* 스크롤바 스타일 (크롬, 사파리 등) */
+.qt-body::-webkit-scrollbar {
+    width: 6px;
+}
+.qt-body::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 3px;
+}
+
+.qt-body .verse {
+    margin-bottom: 0.5rem; /* 마진 축소 */
+    line-height: 1.5;
+    font-size: 0.95rem; /* 폰트 축소 */
+}
+.qt-body .verse strong {
+    font-weight: bold;
+    margin-right: 0.3rem;
+    color: #007bff;
+}
+
+/* 오른쪽: 묵상 노트 영역 */
+.qt-note-area {
+    background-color: #fff;
+    padding: 1.5rem; /* 패딩 축소 */
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.note-title {
+    font-size: 1.2rem; /* 폰트 축소 */
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #343a40;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.8rem;
+    flex-shrink: 0;
+}
+
+.note-textarea {
+    flex-grow: 1; /* 남은 공간을 모두 차지 */
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.5rem;
+    font-size: 1rem; /* 폰트 축소 */
+    line-height: 1.5;
+    resize: none;
+    background-color: #fdfdfd;
+}
+
+.note-textarea:focus {
+    outline: none;
+    border-color: #87CEEB;
+    box-shadow: 0 0 0 0.2rem rgba(135, 206, 235, 0.25);
+    background-color: #fff;
+}
+
+/* 버튼 영역 */
+.btn-area {
+    margin-top: 1rem;
+    flex-shrink: 0;
+}
+
+/* 모바일 대응 (767px 이하) */
+@media (max-width: 767px) {
+    body, html {
+        height: auto; /* 모바일에서는 스크롤 허용 */
+        overflow: auto;
+    }
+    .qt-page-container {
+        height: auto;
+        padding: 1rem;
+        display: block; /* flex 해제 */
+    }
+    #capture-area {
+        height: auto;
+        display: block;
+    }
+    .qt-content-area, .qt-note-area {
+        height: auto; /* 내용만큼 늘어나게 */
+        margin-bottom: 1rem;
+    }
+    .qt-body {
+        max-height: 300px; /* 본문 영역 최대 높이 제한 */
+    }
+    .note-textarea {
+        min-height: 300px;
+    }
+}

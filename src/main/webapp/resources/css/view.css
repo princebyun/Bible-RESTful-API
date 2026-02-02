@@ -1,0 +1,3 @@
+.filter-form { margin-bottom: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 8px; }
+.bible-verse { border-bottom: 1px solid #eee; padding: 10px 0; }
+.bible-verse:last-child { border-bottom: none; }
