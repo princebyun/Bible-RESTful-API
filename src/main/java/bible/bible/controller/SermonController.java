@@ -1,16 +1,22 @@
 package bible.bible.controller;
 
-import bible.bible.domain.Video;
+import bible.bible.dto.SermonsDto;
 import bible.bible.service.YoutubeService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import bible.bible.domain.Video;
 
 import java.io.IOException;
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/api/sermons")
 public class SermonController {
+
+    private static final String CHANNEL_URL = "https://www.youtube.com/@new_center/videos";
 
     private final YoutubeService youtubeService;
 
@@ -18,17 +24,17 @@ public class SermonController {
         this.youtubeService = youtubeService;
     }
 
-    @GetMapping("/sermons")
-    public String listSermons(Model model) {
+    @GetMapping
+    public ResponseEntity<SermonsDto> listSermons() {
         try {
             List<Video> videos = youtubeService.getRecentVideos();
-            model.addAttribute("videos", videos);
-            model.addAttribute("channelUrl", "https://www.youtube.com/@new_center/videos");
+            SermonsDto dto = new SermonsDto();
+            dto.setVideos(videos);
+            dto.setChannelUrl(CHANNEL_URL);
+            return ResponseEntity.ok(dto);
         } catch (IOException e) {
-            // 에러 발생 시 모델에 에러 메시지 추가
-            model.addAttribute("error", "주일말씀 목록을 가져오는 데 실패했습니다.");
             e.printStackTrace();
+            return ResponseEntity.ok(SermonsDto.error("주일말씀 목록을 가져오는 데 실패했습니다."));
         }
-        return "sermons";
     }
 }

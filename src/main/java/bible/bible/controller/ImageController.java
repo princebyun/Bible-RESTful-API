@@ -5,7 +5,6 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletContext;
@@ -17,7 +16,8 @@ import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.UUID;
 
-@Controller
+@RestController
+@RequestMapping("/api")
 public class ImageController {
 
     private final Path uploadPath;
@@ -32,7 +32,6 @@ public class ImageController {
     }
 
     @PostMapping("/uploadImage")
-    @ResponseBody
     public ResponseEntity<String> uploadImage(@RequestBody String imageBase64) {
         try {
             if (imageBase64 == null || !imageBase64.startsWith("data:image/png;base64,")) {
@@ -45,7 +44,7 @@ public class ImageController {
 
             Files.write(destinationFile, imageBytes);
 
-            String fileUrl = "/share-view/" + fileName;
+            String fileUrl = "/api/share/" + fileName;
             return ResponseEntity.ok().body("{\"url\": \"" + fileUrl + "\"}");
 
         } catch (IOException e) {
@@ -53,24 +52,17 @@ public class ImageController {
         }
     }
 
-    @GetMapping("/share-view/{filename:.+}")
-    public String shareView(@PathVariable String filename) {
-        return "share_view";
-    }
-
     @GetMapping("/share/{filename:.+}")
-    @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
         try {
             Path file = uploadPath.resolve(filename).normalize();
             Resource resource = new UrlResource(file.toUri());
-            if (resource.exists() || resource.isReadable()) {
+            if (resource.exists() && resource.isReadable()) {
                 return ResponseEntity.ok()
                         .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
                         .body(resource);
-            } else {
-                return ResponseEntity.notFound().build();
             }
+            return ResponseEntity.notFound().build();
         } catch (MalformedURLException e) {
             return ResponseEntity.badRequest().build();
         }

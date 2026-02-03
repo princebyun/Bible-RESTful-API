@@ -1,16 +1,18 @@
 package bible.bible.controller;
 
+import bible.bible.dto.BibleViewDto;
 import bible.bible.service.BibleService;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
+@RequestMapping("/api/bible")
 public class BibleController {
 
     private final BibleService bibleService;
@@ -19,18 +21,15 @@ public class BibleController {
         this.bibleService = bibleService;
     }
 
-    @GetMapping("/")
-    public String home() {
-        return "index";
-    }
-
-    @GetMapping("/bible")
-    public String bible(
+    /**
+     * 성경 보기 데이터 (구절 목록, 구약/신약, 책 목록, 최대 장, 선택값)
+     */
+    @GetMapping("/view")
+    public ResponseEntity<BibleViewDto> getBibleView(
             @RequestParam Optional<Integer> cate,
             @RequestParam Optional<Integer> book,
             @RequestParam Optional<Integer> chapter,
-            @RequestParam Optional<String> keyword,
-            Model model) {
+            @RequestParam Optional<String> keyword) {
 
         boolean isInitialLoad = !cate.isPresent() && !book.isPresent() && !chapter.isPresent() && !keyword.isPresent();
 
@@ -42,7 +41,7 @@ public class BibleController {
         if (isInitialLoad) {
             finalCate = 1;
             finalBook = 1;
-            finalChapter = 1; // 초기값을 1(1장)로 변경
+            finalChapter = 1;
             finalKeyword = null;
         } else {
             finalCate = cate.filter(c -> c > 0).orElse(null);
@@ -51,30 +50,21 @@ public class BibleController {
             finalKeyword = keyword.filter(k -> !k.trim().isEmpty()).orElse(null);
         }
 
-        model.addAttribute("verses",
-                bibleService.getBibleVerses(finalCate, finalBook, finalChapter, null, finalKeyword));
-        model.addAttribute("testaments", bibleService.getTestaments());
-        model.addAttribute("books", bibleService.getBooks(finalCate));
+        var verses = bibleService.getBibleVerses(finalCate, finalBook, finalChapter, null, finalKeyword);
+        var testaments = bibleService.getTestaments();
+        var books = bibleService.getBooks(finalCate);
+        int maxChapter = (finalBook != null) ? bibleService.getMaxChapter(finalBook) : 0;
 
-        // 선택된 책의 최대 장 수를 모델에 추가 (JSP에서 장 드롭다운을 만들기 위해)
-        if (finalBook != null) {
-            model.addAttribute("maxChapter", bibleService.getMaxChapter(finalBook));
-        } else {
-            model.addAttribute("maxChapter", 0);
-        }
+        BibleViewDto dto = new BibleViewDto(
+                verses, testaments, books, maxChapter,
+                finalCate, finalBook, finalChapter, finalKeyword);
 
-        model.addAttribute("selectedCate", finalCate);
-        model.addAttribute("selectedBook", finalBook);
-        model.addAttribute("selectedChapter", finalChapter);
-        model.addAttribute("selectedKeyword", finalKeyword);
-
-        return "view";
+        return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("/api/chapters")
-    @ResponseBody
-    public Map<String, Integer> getChapters(@RequestParam Integer book) {
+    @GetMapping("/chapters")
+    public ResponseEntity<Map<String, Integer>> getChapters(@RequestParam Integer book) {
         Integer maxChapter = bibleService.getMaxChapter(book);
-        return Collections.singletonMap("maxChapter", maxChapter);
+        return ResponseEntity.ok(Collections.singletonMap("maxChapter", maxChapter));
     }
 }
