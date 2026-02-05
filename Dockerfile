@@ -1,33 +1,23 @@
 # Stage 1: 빌드
 FROM eclipse-temurin:17-jdk-jammy AS builder
-
 WORKDIR /app
 
-# Gradle 래퍼 + 설정 복사
 COPY gradlew .
 COPY gradle gradle
 COPY build.gradle .
 COPY settings.gradle .
-
-# 소스 복사
 COPY src src
 
-# WAR 빌드 (테스트 제외하고 빠르게 빌드)
-# 'id war' 플러그인 때문에 결과물은 build/libs/프로젝트명-버전.war로 생성됩니다.
-RUN chmod +x gradlew && ./gradlew clean build -x test --no-daemon
+# plain.war 생성을 막기 위해 bootWar 명령어를 명시적으로 사용
+RUN chmod +x gradlew && ./gradlew  builder -x test --no-daemon
 
-# Stage 2: 실행 (ARM/amd64 공통)
+# Stage 2: 실행
 FROM eclipse-temurin:17-jre-jammy
-
 WORKDIR /app
 
-# 🔴 변경된 부분:
-# 1. 원본 파일이 .war이므로 *.war를 찾습니다. (이름이 달라도 찾을 수 있게 와일드카드 사용)
-# 2. 복사할 이름을 app.war로 변경합니다.
-COPY --from=builder /app/build/libs/*.war app.war
+# 🔴 핵심 수정: *.war 대신 정확한 파일명을 콕 집어서 복사합니다.
+# (plain.war가 있어도 무시하고 실행 가능한 놈만 가져옵니다)
+COPY --from=builder /app/build/libs/bible-0.0.1-SNAPSHOT-plani.war app.war
 
 EXPOSE 8080
-
-# 🔴 변경된 부분:
-# Spring Boot로 만든 WAR는 JAR처럼 바로 실행 가능합니다. app.war를 실행합니다.
 ENTRYPOINT ["java", "-jar", "app.war"]
