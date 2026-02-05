@@ -1,8 +1,10 @@
 .git
 .gitignore
 .gradle
+build
 *.iml
 .idea
 *.md
 Dockerfile
 .dockerignore
+terminals
