@@ -13,7 +13,7 @@ COPY settings.gradle .
 COPY src src
 
 # WAR 빌드 (다운로드 캐시 활용)
-RUN chmod +x gradlew && ./gradlew war --no-daemon
+RUN chmod +x gradlew && ./gradlew clean build --no-daemon
 
 # Stage 2: 실행 (ARM/amd64 공통)
 FROM eclipse-temurin:17-jre-jammy
@@ -21,7 +21,7 @@ FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 
 # 빌드된 WAR만 복사
-COPY --from=builder /app/build/libs/bible-*.war app.war
+COPY --from=builder /app/build/libs/bible-*.jar app.jar
 
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.war"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
