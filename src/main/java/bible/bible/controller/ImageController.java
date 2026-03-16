@@ -1,5 +1,6 @@
 package bible.bible.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -7,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -22,8 +22,8 @@ public class ImageController {
 
     private final Path uploadPath;
 
-    public ImageController(ServletContext servletContext) {
-        this.uploadPath = Paths.get(servletContext.getRealPath("/share/")).normalize();
+    public ImageController(@Value("${upload.path}") String uploadDir) {
+        this.uploadPath = Paths.get(uploadDir).normalize();
         try {
             Files.createDirectories(uploadPath);
         } catch (IOException e) {
